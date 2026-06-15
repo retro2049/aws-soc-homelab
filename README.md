@@ -28,32 +28,82 @@ To learn/practice core cybersecurity concepts in offensive/defensive/cloud secur
 Three isolated VPCs connected by a Transit Gateway, with an attacker VPC deliberately left unattached for isolation.
 
 
-┌─────────────────────────────────────────────────────────────────────┐
-│                         AWS ACCOUNT                                 │
-│                                                                     │
-│  ┌──────────────┐   Transit Gateway   ┌───────────────────────────┐ │
-│  │ Security VPC │◄───────────────────►│    Corporate VPC          │ │
-│  │ 10.0.0.0/16  │                     │    10.1.0.0/16            │ │
-│  │              │                     │  ┌──────────────────────┐ │ │
-│  │  Wazuh       │                     │  │ IT           DC01    │ │ │
-│  │  Elastic     │                     │  │ Finance  	          │ │ │
-│  │  Suricata    │                     │  │ Sales    		  │ │ │
-│  │  		  │                     │  │ DMZ: DVWA + JuiceShop│ │ │
-│  └──────────────┘                     │  └──────────────────────┘ │ │
-│                                       └───────────────────────────┘ │
-│  ┌─────────────────────┐                                            │
-│  │ Attacker VPC        │  ← Fully isolated, no TGW peering          │
-│  │ 10.2.0.0/16  (GOAD) │                                            │
-│  └─────────────────────┘                                            │
-│                                                                     │
-│  AWS: CloudTrail · GuardDuty · Config · WAF · VPC Flow Logs         │
-└─────────────────────────────────────────────────────────────────────┘
-                    ▲
-                    │  AWS Client VPN
-                    │
-             [Local Kali VM]   ← All offensive testing
+```mermaid
+flowchart TB
 
+%% =======================
+%% Styles (portfolio clean look)
+%% =======================
+classDef security fill:#fdecea,stroke:#c62828,stroke-width:2px,color:#111;
+classDef corporate fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#111;
+classDef attacker fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,color:#111;
+classDef network fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#111;
+classDef service fill:#ede7f6,stroke:#5e35b1,stroke-width:2px,color:#111;
 
+%% =======================
+%% Entry Layer
+%% =======================
+Kali["Local Kali VM<br/>Offensive Security Testing"]
+VPN["AWS Client VPN"]
+
+Kali --> VPN
+
+%% =======================
+%% AWS ACCOUNT
+%% =======================
+subgraph AWS["AWS Account"]
+
+    %% Security VPC
+    subgraph SEC["Security VPC<br/>10.0.0.0/16"]
+        WZ["Wazuh XDR<br/>10.0.1.10"]
+        ELK["Elastic SIEM<br/>10.0.1.20"]
+        SPL["Splunk<br/>Log Analysis"]
+        SUR["Suricata IDS<br/>Network Detection"]
+    end
+
+    %% Transit Gateway
+    TGW["Transit Gateway"]
+
+    %% Corporate VPC
+    subgraph CORP["Corporate VPC<br/>10.1.0.0/16"]
+
+        IT["IT Subnet<br/>10.1.1.0/24"]
+        FIN["Finance Subnet<br/>10.1.2.0/24"]
+        SALES["Sales Subnet<br/>10.1.3.0/24"]
+        DMZ["DMZ<br/>10.1.4.0/24<br/>DVWA + Juice Shop"]
+
+        DC["DC01<br/>Hardened AD<br/>10.1.1.10"]
+    end
+
+    %% Attacker VPC
+    subgraph ATT["Attacker VPC<br/>10.2.0.0/16"]
+        GOAD["GOAD Lab (Planned)<br/>Fully Isolated"]
+    end
+
+    %% Connectivity
+    SEC <--> TGW
+    TGW <--> CORP
+
+    GOAD -. No Transit Gateway Attachment .- TGW
+
+    %% AWS Security Services
+    SERVICES["CloudTrail • GuardDuty • AWS Config • WAF • VPC Flow Logs"]
+end
+
+%% =======================
+%% External Access
+%% =======================
+VPN --> AWS
+
+%% =======================
+%% Styling assignment
+%% =======================
+class SEC security;
+class CORP corporate;
+class ATT attacker;
+class TGW,VPN network;
+class SERVICES service;
+```
 
 See `architecture/` for the full diagram and design decisions.
 
