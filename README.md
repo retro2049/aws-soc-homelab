@@ -28,25 +28,20 @@ To learn/practice core cybersecurity concepts in offensive/defensive/cloud secur
 Three isolated VPCs connected by a Transit Gateway, with an attacker VPC deliberately left unattached for isolation.
 
 
-Security VPC (10.0.0.0/16)         Corporate VPC (10.1.0.0/16)
-
-
-Wazuh manager  10.0.1.10           DC01 (hardened AD)  10.1.1.10
-
-Elastic stack  10.0.1.20           FINANCE-01 / IT-01 / SALES-01
-
-Suricata IDS   10.0.1.40           DMZ: DVWA + Juice Shop
-
-     |                                     |
-
-
-     +---------- Transit Gateway ----------+
-
-
-   Attacker VPC (10.2.0.0/16)  [planned: GOAD]
-
-         # no TGW attachment on GOAD
-
+|  Security VPC (10.0.0.0/16)           |              Corporate VPC (10.1.0.0/16)
+|---------------------------------------------------------------------------------------|
+|											|
+|  Wazuh manager  10.0.1.10        		       DC01 (hardened AD)  10.1.1.10    |
+|											|
+|  Elastic stack  10.0.1.20   ->  Transit Gateway ->   FINANCE-01 / IT-01 / SALES-01	|
+|											|
+|  Suricata IDS   10.0.1.40                            DMZ: DVWA + Juice Shop		|
+|											|
+|---------------------------------------------------------------------------------------|
+|                   Attacker VPC (10.2.0.0/16)  [planned: GOAD]				|
+|											|
+|                            # no TGW attachment on GOAD				|	|
+|---------------------------------------------------------------------------------------|
 
 See `architecture/` for the full diagram and design decisions.
 
