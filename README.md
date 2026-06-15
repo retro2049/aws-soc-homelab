@@ -55,9 +55,9 @@ subgraph AWS["AWS Account"]
 
     %% Security VPC
     subgraph SEC["Security VPC<br/>10.0.0.0/16"]
-        WZ["Wazuh<br/>10.0.1.10"]
-        ELK["Elastic<br/>10.0.1.20"]
-        SUR["Suricata IDS<br/>Network Detection"]
+        WZ["Wazuh<br/>"]
+        ELK["Elastic<br/>"]
+        SUR["Suricata IDS<br/>"]
     end
 
     %% Transit Gateway
@@ -66,17 +66,18 @@ subgraph AWS["AWS Account"]
     %% Corporate VPC
     subgraph CORP["Corporate VPC<br/>10.1.0.0/16"]
 
-        IT["IT Subnet<br/>10.1.1.0/24"]
-        FIN["Finance Subnet<br/>10.1.2.0/24"]
-        SALES["Sales Subnet<br/>10.1.3.0/24"]
-        DMZ["DMZ<br/>10.1.4.0/24<br/>DVWA + Juice Shop"]
+        IT["IT Subnet<br/>"]
+        FIN["Finance Subnet<br/>"]
+        SALES["Sales Subnet<br/>"]
+        DMZ["DMZ<br/>DVWA + Juice Shop"]
 
-        DC["DC01<br/>Hardened AD<br/>10.1.1.10"]
+        DC["DC01<br/>Hardened AD<br/>"]
+	MailServer["MailServer<br/>"]
+	DB["Database<br/>"]
     end
 
     %% Attacker VPC
-    subgraph ATT["Attacker VPC<br/>10.2.0.0/16"]
-
+    subgraph ATT["Attacker VPC<br/>10.2.0.0/16<br/><br/>"]
         GOAD["GOAD Lab (Planned)<br/>Fully Isolated"]
     end
 
@@ -128,7 +129,7 @@ See `architecture/` for the full diagram and design decisions.
 | Hybrid identity (Entra ID + Okta) 		    | 📋 Planned	|              ---	           |
 | Atomic RedTeam + Caldera on endpoints		    | 📋 Planned 	|  	       --- 		   |
 | GOAD offensive lab (isolated VPC)                 | 📋 Planned 	|              --- 		   |
-| Documented attack/detection scenarios 	    | 📋 Planned 	|			           |
+| Documented attack/detection scenarios 	    | 📋 Planned 	|   	       ---		   |
 | Terraform IaC					    | 📋 Planned        | Capturing working config as I go |				   |
 
 # Skills demonstrated
