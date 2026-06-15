@@ -28,21 +28,32 @@ To learn/practice core cybersecurity concepts in offensive/defensive/cloud secur
 Three isolated VPCs connected by a Transit Gateway, with an attacker VPC deliberately left unattached for isolation.
 
 
-|  Security VPC (10.0.0.0/16)    |                            | Corporate VPC (10.1.0.0/16)		|
-|--------------------------------|----------------------------|-----------------------------------------|
-|				 |		              |						|
-|  Wazuh manager  10.0.1.10      |  		              | DC01 (hardened AD)  10.1.1.10  	        |
-|				 |		              |						|
-|  Elastic stack  10.0.1.20      |       Transit Gateway      | FINANCE-01 / IT-01 / SALES-01   	|
-|				 |			      |				        	|
-|  Suricata IDS   10.0.1.40      |        	              | DMZ: DVWA + Juice Shop			|
-|				 |		              |						|
-|--------------------------------|----------------------------|-----------------------------------------|
-|                                | Attacker VPC (10.2.0.0/16) |						|
-|                                |      [planned: GOAD]	      |						|
-|			         |			      |						|
-|                                | # no TGW attachment on GOAD|						|
-|--------------------------------|----------------------------|-----------------------------------------|
+┌─────────────────────────────────────────────────────────────────────┐
+│                         AWS ACCOUNT                                 │
+│                                                                     │
+│  ┌──────────────┐   Transit Gateway   ┌───────────────────────────┐ │
+│  │ Security VPC │◄───────────────────►│    Corporate VPC          │ │
+│  │ 10.0.0.0/16  │                     │    10.1.0.0/16            │ │
+│  │              │                     │  ┌──────────────────────┐ │ │
+│  │  Wazuh       │                     │  │ IT           DC01    │ │ │
+│  │  Elastic     │                     │  │ Finance  	          │ │ │
+│  │  Suricata    │                     │  │ Sales    		  │ │ │
+│  │  		  │                     │  │ DMZ: DVWA + JuiceShop│ │ │
+│  └──────────────┘                     │  └──────────────────────┘ │ │
+│                                       └───────────────────────────┘ │
+│  ┌─────────────────────┐                                            │
+│  │ Attacker VPC        │  ← Fully isolated, no TGW peering          │
+│  │ 10.2.0.0/16  (GOAD) │                                            │
+│  └─────────────────────┘                                            │
+│                                                                     │
+│  AWS: CloudTrail · GuardDuty · Config · WAF · VPC Flow Logs         │
+└─────────────────────────────────────────────────────────────────────┘
+                    ▲
+                    │  AWS Client VPN
+                    │
+             [Local Kali VM]   ← All offensive testing
+
+
 
 See `architecture/` for the full diagram and design decisions.
 
@@ -118,17 +129,17 @@ Real problems hit during the build (full detail in `build-notes/`):
 # Repository structure
 
 
-architecture/    network diagram + design decisions
+architecture/ =   network diagram + design decisions
 
-build-notes/     phase-by-phase build log with troubleshooting
+build-notes/  =    phase-by-phase build log with troubleshooting
 
-detections/      wazuh-rules/, suricata/, logstash-pipelines/
+detections/   =    wazuh-rules/, suricata/, logstash-pipelines/
 
-docs/            deep-dives (AD hardening, etc.)
+docs/         =    deep-dives (AD hardening, etc.)
 
-runbooks/        incident-response procedures (planned)
+runbooks/     =    incident-response procedures (planned)
 
-screenshots/     evidence of working components
+screenshots/  =     evidence of working components
 
 
 # Roadmap
