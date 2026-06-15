@@ -55,9 +55,8 @@ subgraph AWS["AWS Account"]
 
     %% Security VPC
     subgraph SEC["Security VPC<br/>10.0.0.0/16"]
-        WZ["Wazuh XDR<br/>10.0.1.10"]
-        ELK["Elastic SIEM<br/>10.0.1.20"]
-        SPL["Splunk<br/>Log Analysis"]
+        WZ["Wazuh<br/>10.0.1.10"]
+        ELK["Elastic<br/>10.0.1.20"]
         SUR["Suricata IDS<br/>Network Detection"]
     end
 
@@ -77,6 +76,7 @@ subgraph AWS["AWS Account"]
 
     %% Attacker VPC
     subgraph ATT["Attacker VPC<br/>10.2.0.0/16"]
+
         GOAD["GOAD Lab (Planned)<br/>Fully Isolated"]
     end
 
@@ -126,10 +126,10 @@ See `architecture/` for the full diagram and design decisions.
 | Finance DB + mail server 			    | 📋 Planned 	| 	       ---		   |
 | AWS Client VPN 				    | 📋 Planned 	|              ---	           |
 | Hybrid identity (Entra ID + Okta) 		    | 📋 Planned	|              ---	           |
-| GOAD offensive lab (isolated VPC) 		    | 📋 Planned 	|  	       --- 		   |
-| Documented attack/detection scenarios             | 📋 Planned 	|              --- 		   |
-| Terraform IaC 				    | 📋 Planned 	| Capturing working config as I go |
-
+| Atomic RedTeam + Caldera on endpoints		    | 📋 Planned 	|  	       --- 		   |
+| GOAD offensive lab (isolated VPC)                 | 📋 Planned 	|              --- 		   |
+| Documented attack/detection scenarios 	    | 📋 Planned 	|			           |
+| Terraform IaC					    | 📋 Planned        | Capturing working config as I go |				   |
 
 # Skills demonstrated
 
@@ -179,17 +179,17 @@ Real problems hit during the build (full detail in `build-notes/`):
 # Repository structure
 
 
-architecture/ =   network diagram + design decisions
+architecture/   ->   network diagram + design decisions
 
-build-notes/  =    phase-by-phase build log with troubleshooting
+build-notes/    ->   phase-by-phase build log with troubleshooting
 
-detections/   =    wazuh-rules/, suricata/, logstash-pipelines/
+detections/     ->   wazuh-rules/, suricata/, logstash-pipelines/
 
-docs/         =    deep-dives (AD hardening, etc.)
+docs/           ->   deep-dives (AD hardening, etc.)
 
-runbooks/     =    incident-response procedures (planned)
+runbooks/       ->   incident-response procedures (planned)
 
-screenshots/  =     evidence of working components
+screenshots/    ->    evidence of working components
 
 
 # Roadmap
