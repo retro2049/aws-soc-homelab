@@ -214,7 +214,7 @@ Real problems hit during the build (full detail in `build-notes/`):
 
 # Roadmap
 
-Web apps + DB → WAF on ALB → Client VPN → hybrid identity → GOAD offensive lab → adversary emulation (Atomic Red Team, Caldera) → documented purple-team scenarios → full Terraform IaC.
+Web apps + DB → WAF on ALB → Client VPN → Hybrid Identity → GOAD Offensive lab → Adversary emulation (Atomic Red Team, Caldera) → Documented purple-team scenarios → Full Terraform IaC.
 
 -----------------------------------------------------------------------------------------------------------
 
