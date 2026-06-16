@@ -26,7 +26,7 @@ To learn/practice core cybersecurity concepts in offensive/defensive/cloud secur
 
 Three isolated VPCs connected by a Transit Gateway, with an attacker VPC deliberately left unattached for isolation.
 
-
+```mermaid
 flowchart TB
 
 %% =======================
@@ -119,7 +119,7 @@ class ATT attacker;
 class TGW,VPN network;
 class SERVICES service;
 class Spacer hidden;
-
+```
 
 See `architecture/` for the full diagram and design decisions.
 
