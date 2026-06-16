@@ -10,8 +10,7 @@ Production-grade SOC home lab on AWS with SIEM, hardened AD, network IDS, hybrid
 
 #Summary
 
-A production style Security Operations Center built from scratch on AWS with segmented multi-VPC network, a SIEM/IDS detection stack, a CIS-hardened Active Directory domain, and (planned) an isolated offensive lab with documented attack and detect scenarios.
-
+A production style Security Operations Center built from scratch on AWS, spanning both defense and offense: a segmented multi-VPC network, a four tool SIEM/IDS detection stack, a CIS hardened Active Directory domain, a WAF protected application tier, an isolated offensive lab (GOAD), and adversary emulation tooling (Atomic Red Team, Caldera) driving documented purple team attack and detect scenarios mapped to MITRE ATT&CK.
 
 # STATUS: ACTIVELY BUILDING. 
 
@@ -28,7 +27,6 @@ To learn/practice core cybersecurity concepts in offensive/defensive/cloud secur
 Three isolated VPCs connected by a Transit Gateway, with an attacker VPC deliberately left unattached for isolation.
 
 
-```mermaid
 flowchart TB
 
 %% =======================
@@ -39,6 +37,7 @@ classDef corporate fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#111;
 classDef attacker fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,color:#111;
 classDef network fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#111;
 classDef service fill:#ede7f6,stroke:#5e35b1,stroke-width:2px,color:#111;
+classDef hidden fill:transparent,stroke:transparent,color:transparent;
 
 %% =======================
 %% Entry Layer
@@ -55,9 +54,9 @@ subgraph AWS["AWS Account"]
 
     %% Security VPC
     subgraph SEC["Security VPC<br/>10.0.0.0/16"]
-        WZ["Wazuh<br/>"]
-        ELK["Elastic<br/>"]
-        SUR["Suricata IDS<br/>"]
+        WZ["Wazuh"]
+        ELK["Elastic"]
+        SUR["Suricata IDS"]
     end
 
     %% Transit Gateway
@@ -66,19 +65,33 @@ subgraph AWS["AWS Account"]
     %% Corporate VPC
     subgraph CORP["Corporate VPC<br/>10.1.0.0/16"]
 
-        IT["IT Subnet<br/>"]
-        FIN["Finance Subnet<br/>"]
-        SALES["Sales Subnet<br/>"]
-        DMZ["DMZ<br/>DVWA + Juice Shop"]
+        %% First row
+        subgraph CORP_NET[" "]
+            direction LR
+            IT["IT Subnet"]
+            FIN["Finance Subnet"]
+            SALES["Sales Subnet"]
+            DMZ["DMZ<br/>DVWA + Juice Shop"]
+        end
 
-        DC["DC01<br/>Hardened AD<br/>"]
-	MailServer["MailServer<br/>"]
-	DB["Database<br/>"]
+        %% Second row
+        subgraph CORP_SERVERS[" "]
+            direction LR
+            DC["DC01<br/>Hardened AD"]
+            MailServer["MailServer"]
+            DB["Database"]
+        end
+
     end
 
     %% Attacker VPC
-    subgraph ATT["Attacker VPC<br/>10.2.0.0/16<br/><br/>"]
-        GOAD["GOAD Lab (Planned)<br/>Fully Isolated"]
+    subgraph ATT["Attacker VPC<br/>10.2.0.0/16"]
+
+        Spacer[" "]
+
+        GOAD["GOAD<br/>Fully Isolated"]
+
+        Spacer --> GOAD
     end
 
     %% Connectivity
@@ -89,6 +102,7 @@ subgraph AWS["AWS Account"]
 
     %% AWS Security Services
     SERVICES["CloudTrail • GuardDuty • AWS Config • WAF • VPC Flow Logs"]
+
 end
 
 %% =======================
@@ -104,7 +118,8 @@ class CORP corporate;
 class ATT attacker;
 class TGW,VPN network;
 class SERVICES service;
-```
+class Spacer hidden;
+
 
 See `architecture/` for the full diagram and design decisions.
 
@@ -117,9 +132,9 @@ See `architecture/` for the full diagram and design decisions.
 | AWS account hardening (MFA, IAM, CLI via SSO)     | ✅ Done 		| 	       ---	           |
 | Logging baseline (CloudTrail, GuardDuty, Config)  | ✅ Done 		| CIS conformance pack 	           |
 | Multi-VPC network + Transit Gateway 		    | ✅ Done 		| Attacker VPC isolated by design  |
-| Security groups (least-privilege, egress filtered)| ✅ Done 		| 7 tiered SGs 		           |
+| Security groups (least privilege, egress filtered)| ✅ Done 		| 7 tiered SGs 		           |
 | Hardened Active Directory (DC01) 		    | ✅ Done 		| CIS baseline — see `docs/`  	   |
-| Windows endpoints domain-joined 		    | ✅ Done 		| 3 endpoints, tiered OUs          |
+| Windows endpoints domain joined 		    | ✅ Done 		| 3 endpoints, tiered OUs          |
 | Wazuh SIEM + agents 			            | ✅ Done 		| Custom detection rules           |
 | Elastic Stack + Logstash pipelines 		    | ✅ Done 		| CloudTrail + VPC Flow Logs 	   |
 | Suricata network IDS + VPC traffic mirroring      | ✅ Done 		| Alerts forwarded to Wazuh 	   |
@@ -127,8 +142,12 @@ See `architecture/` for the full diagram and design decisions.
 | Finance DB + mail server 			    | 📋 Planned 	| 	       ---		   |
 | AWS Client VPN 				    | 📋 Planned 	|              ---	           |
 | Hybrid identity (Entra ID + Okta) 		    | 📋 Planned	|              ---	           |
-| Atomic RedTeam + Caldera on endpoints		    | 📋 Planned 	|  	       --- 		   |
-| GOAD offensive lab (isolated VPC)                 | 📋 Planned 	|              --- 		   |
+| GOAD offensive lab (isolated VPC)		    | 📋 Planned 	|  	       --- 		   |
+| AWS WAF on application load balancer              | 📋 Planned        | Rules + rate limiting + logging  |
+| Adversary emulation - Atomic Red Team             | 📋 Planned        | Atomic tests per MITRE technique |
+| Adversary emulation - Caldera                     | 📋 Planned        | Automated attack chains          |
+| Purple team scenarios (MITRE ATT&CK mapped)       | 📋 Planned        | Attack -> detect -> harden       |
+| Lambda cost scheduler			            | 📋 Planned 	|              --- 		   |
 | Documented attack/detection scenarios 	    | 📋 Planned 	|   	       ---		   |
 | Terraform IaC					    | 📋 Planned        | Capturing working config as I go |				   |
 
@@ -146,20 +165,24 @@ See `architecture/` for the full diagram and design decisions.
 
 - Linux/Windows administration, troubleshooting, and secure by default configuration.
 
-- Offensive Security: cyber kill chain divided in several attack scenarios.
+- Offensive & Purple-team: adversary emulation with Atomic Red Team and Caldera, attacks against an isolated GOAD lab (Kerberoasting, AS-REP roasting, DCSync, NTLM relay, Golden Ticket, password spraying, web exploitation), each mapped to MITRE ATT&CK and paired with the detection that catches it and the hardening that stops it.
 
 
 # Tech stack
 
-AWS (VPC, EC2, TGW, IAM, CloudTrail, GuardDuty, Config, S3, AWS CLI);
+AWS (VPC, EC2, TGW, IAM, CloudTrail, GuardDuty, Config, S3, WAF, AWS CLI);
  Wazuh 4.14;
   Elastic Stack 9.4;
    Suricata 8.0;
-     Windows Server 2022 (Active Directory + Endpoints);
-      Ubuntu 24.04 (SIEM + Company Apps);
-       Kali Linux (attack scenarios);
-        Terraform (planned);
-         GitHub
+    Atomic Red Team; 
+     Caldera;
+      MITRE ATT&CK; 
+       GOAD;
+        Windows Server 2022 (Active Directory + Endpoints);
+         Ubuntu 24.04 (SIEM + Company Apps);
+          Kali Linux (attack scenarios);
+           Terraform;
+            GitHub
 
 
 # Engineering challenges solved
@@ -180,22 +203,20 @@ Real problems hit during the build (full detail in `build-notes/`):
 # Repository structure
 
 
-architecture/   ->   network diagram + design decisions
+| Directory | Contents |
+|-----------|----------|
+| `architecture/` | network diagram + design decisions |
+| `build-notes/` | phase-by-phase build log with troubleshooting |
+| `detections/` | `wazuh-rules/`, `suricata/`, `logstash-pipelines/` |
+| `docs/` | deep-dives (AD hardening, etc.) |
+| `runbooks/` | incident-response procedures |
+| `screenshots/` | evidence of working components |
 
-build-notes/    ->   phase-by-phase build log with troubleshooting
-
-detections/     ->   wazuh-rules/, suricata/, logstash-pipelines/
-
-docs/           ->   deep-dives (AD hardening, etc.)
-
-runbooks/       ->   incident-response procedures (planned)
-
-screenshots/    ->    evidence of working components
 
 
 # Roadmap
 
-Web apps + DB → Client VPN → hybrid identity → GOAD offensive lab → documented attack/detection scenarios → full Terraform IaC.
+Web apps + DB → WAF on ALB → Client VPN → hybrid identity → GOAD offensive lab → adversary emulation (Atomic Red Team, Caldera) → documented purple-team scenarios → full Terraform IaC.
 
 -----------------------------------------------------------------------------------------------------------
 
