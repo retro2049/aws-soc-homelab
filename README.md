@@ -137,6 +137,7 @@ See `architecture/` for the full diagram and design decisions.
 | Elastic Stack + Logstash pipelines 		    | ✅ Done 		| CloudTrail + VPC Flow Logs 	   |
 | Suricata network IDS + VPC traffic mirroring      | ✅ Done 		| Alerts forwarded to Wazuh 	   |
 | Vulnerable web apps (DVWA, Juice Shop) 	    | 🔶 In progress    | 	       --- 		   |
+| Splunk SIEM (HEC + AWS add-on + SPL detections)   | 📋 Planned        | Enterprise SIEM + SPL queries    |
 | Finance DB + mail server 			    | 📋 Planned 	| 	       ---		   |
 | AWS Client VPN 				    | 📋 Planned 	|              ---	           |
 | Hybrid identity (Entra ID + Okta) 		    | 📋 Planned	|              ---	           |
@@ -172,15 +173,16 @@ AWS (VPC, EC2, TGW, IAM, CloudTrail, GuardDuty, Config, S3, WAF, AWS CLI);
  Wazuh 4.14;
   Elastic Stack 9.4;
    Suricata 8.0;
-    Atomic Red Team; 
-     Caldera;
-      MITRE ATT&CK; 
-       GOAD;
-        Windows Server 2022 (Active Directory + Endpoints);
-         Ubuntu 24.04 (SIEM + Company Apps);
-          Kali Linux (attack scenarios);
-           Terraform;
-            GitHub
+    Splunk;
+     Atomic Red Team; 
+      Caldera;
+       MITRE ATT&CK; 
+        GOAD;
+         Windows Server 2022 (Active Directory + Endpoints);
+          Ubuntu 24.04 (SIEM + Company Apps);
+           Kali Linux (attack scenarios);
+            Terraform;
+             GitHub
 
 
 # Engineering challenges solved
