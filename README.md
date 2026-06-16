@@ -85,9 +85,7 @@ subgraph AWS["AWS Account"]
     end
 
     %% Attacker VPC
-    subgraph ATT["Attacker VPC<br/>10.2.0.0/16"]
-
-        Spacer[" "]
+    subgraph ATT["Attacker VPC<br/>10.2.0.0/16<br/><br/><br/>"]
 
         GOAD["GOAD<br/>Fully Isolated"]
 
