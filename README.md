@@ -10,21 +10,22 @@ Production-grade SOC home lab on AWS with SIEM, hardened AD, network IDS, hybrid
 
 #Summary
 
-A production style Security Operations Center built from scratch on AWS, spanning both defense and offense: a segmented multi-VPC network, a four tool SIEM/IDS detection stack, a CIS hardened Active Directory domain, a WAF protected application tier, an isolated offensive lab (GOAD), and adversary emulation tooling (Atomic Red Team, Caldera) driving documented purple team attack and detect scenarios mapped to MITRE ATT&CK.
+A production style Security Operations Center built from scratch on AWS, spanning both defense and offense as follows -> A segmented multi-VPC network, a four tool SIEM/IDS detection stack, a CIS hardened Active Directory domain, a WAF protected application tier, an isolated offensive lab (GOAD), and adversary emulation tooling (Atomic Red Team, Caldera) driving documented purple team attack and detect scenarios mapped to MITRE ATT&CK.
 
 # STATUS: ACTIVELY BUILDING. 
 
-This is a living project - I'm documenting it as I build, including the real problems I hit and how I solved them. The build log in `build-notes/` reflects genuine troubleshooting, not a polished tutorial. Sections marked "planned" are next on the roadmap.
+This is a living project -> **I'm documenting it as I build**, including the real problems I hit and how I solved them. The build log in `build-notes/` reflects genuine troubleshooting. Sections marked "planned" are next on the roadmap.
 
 
 # Why I built this
 
-To learn/practice core cybersecurity concepts in offensive/defensive/cloud security operations end to end: network design, SIEM engineering, detection writing, AD hardening, and the offensive techniques those defenses are meant to stop. I learn fastest by building real systems and debugging real failures, and this repo is the evidence of that process. The same skills can be trasfered to other cloud vendors (Azure/GCP) and tools (Sentinel, Splunk, Defender), which I'm confident I can pick up quickly.
+To **learn/practice** core cybersecurity concepts in **offensive/defensive/cloud** security operations end to end: network design, SIEM engineering, detection writing, AD hardening, and the offensive techniques those defenses are meant to stop. I learn fastest by building real systems and debugging real failures, and this repo is the evidence of that process. The same skills can be trasfered to other cloud vendors (Azure/GCP) and tools (Sentinel, Splunk, Defender), which I'm confident I can pick up quickly.
 
 
 # Architecture
 
 Three isolated VPCs connected by a Transit Gateway, with an attacker VPC deliberately left unattached for isolation.
+
 
 ```mermaid
 flowchart TB
@@ -54,9 +55,25 @@ subgraph AWS["AWS Account"]
 
     %% Security VPC
     subgraph SEC["Security VPC<br/>10.0.0.0/16"]
-        WZ["Wazuh"]
-        ELK["Elastic"]
-        SUR["Suricata IDS"]
+
+        subgraph SEC_NET[" "]
+            direction LR
+
+            SIEM["SIEM Subnet"]
+
+            subgraph SEC_TOOLS[" "]
+                direction TB
+                WZ["Wazuh"]
+                ELK["Elastic"]
+                SUR["Suricata IDS"]
+            end
+
+        end
+
+        SIEM --> WZ
+        SIEM --> ELK
+        SIEM --> SUR
+
     end
 
     %% Transit Gateway
@@ -71,26 +88,35 @@ subgraph AWS["AWS Account"]
             IT["IT Subnet"]
             FIN["Finance Subnet"]
             SALES["Sales Subnet"]
-            DMZ["DMZ<br/>DVWA + Juice Shop"]
+            DMZ["DMZ Subnet"]
         end
 
         %% Second row
         subgraph CORP_SERVERS[" "]
             direction LR
             DC["DC01<br/>Hardened AD"]
-            MailServer["MailServer"]
             DB["Database"]
+            MailServer["MailServer"]
         end
+
+        %% Third row
+        DVWA["DVWA + Juice Shop"]
 
     end
 
     %% Attacker VPC
-    subgraph ATT["Vulnerable VPC<br/>10.2.0.0/16<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>"]
+    subgraph ATT["Attack VPC<br/>10.2.0.0/16<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>"]
 
         GOAD["GOAD<br/>"]
 
         Spacer --> GOAD
     end
+
+    %% Corporate relationships
+    DC --> IT
+    DB --> FIN
+    MailServer --> SALES
+    DVWA --> DMZ
 
     %% Connectivity
     SEC <--> TGW
@@ -117,9 +143,13 @@ class ATT attacker;
 class TGW,VPN network;
 class SERVICES service;
 class Spacer hidden;
+
+%% Make DVWA + Juice Shop match server styling
+class DVWA service;
 ```
 
-See `architecture/` for the full diagram and design decisions.
+
+See `architecture/` for more info.
 
 
 
