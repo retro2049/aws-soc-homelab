@@ -20,13 +20,13 @@
 
 **1. Attacker VPC is isolated by omission.** It has an internet gateway but **no Transit Gateway attachment**, so it cannot route to Corporate or Security. The only access path to GOAD is from an external Kali host.
 
-2. Defense and offense are physically separated for the Domain Controller. The hardened DC01 (Corporate) is the *defensive showcase*. All offensive DC activity targets the separate, intentionally vulnerable GOAD lab.
+**2. Defense and offense are physically separated for the Domain Controller.** The hardened DC01 (Corporate) is the **defensive showcase**. All offensive DC activity targets the separate, intentionally vulnerable GOAD lab.
 
-3. Security VPC is not domain-joined. SIEM/IDS hosts stay independent of AD so that if the domain is compromised, the monitoring stack remains trustworthy.
+**3. Security VPC is not domain-joined.** SIEM/IDS hosts stay independent of AD so that if the domain is compromised, the monitoring stack remains trustworthy.
 
-4. Least-privilege, egress filtered security groups. Seven tiered Security Groups; Endpoints have explicit ingress-egress allow lists.
+**4. Least-privilege, egress filtered security groups.** Seven tiered Security Groups; Endpoints have explicit ingress-egress allow lists.
 
-5. Centralized DNS through the domain controller. The Corporate VPC DHCP option set points all members at DC01 and forwards external queries to the AWS resolver. This dependency means DC01 must be running for any Corporate host to resolve DNS.
+**5. Centralized DNS through the domain controller.** The Corporate VPC DHCP option set points all members at DC01 and forwards external queries to the AWS resolver. This dependency means DC01 must be running for any Corporate host to resolve DNS.
 
 ## Detection coverage (layered)
 
