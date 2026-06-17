@@ -1,0 +1,22 @@
+# Suricata 8.0 - key config
+# Ruleset source:
+17/6/2026 -- 11:50:59 - <Info> -- Using data-directory /var/lib/suricata.
+17/6/2026 -- 11:50:59 - <Info> -- Using Suricata configuration /etc/suricata/suricata.yaml
+17/6/2026 -- 11:50:59 - <Info> -- Using /usr/share/suricata/rules for Suricata provided rules.
+17/6/2026 -- 11:50:59 - <Info> -- Found Suricata version 8.0.5 at /usr/bin/suricata.
+Enabled sources:
+  - et/open
+
+# vars (HOME_NET / EXTERNAL_NET):
+    HOME_NET: "[10.0.0.0/16,10.1.0.0/16]"
+     # Cororate/Security VPCs mirrored
+
+    #HOME_NET: "[My_IP]"
+    #HOME_NET: "[10.0.0.0/8]"
+
+# af-packet capture interface:
+af-packet:
+  - interface: ens6
+    # Number of receive threads. "auto" uses the number of cores
+    #threads: auto
+    # Default clusterid. AF_PACKET will load balance packets based on flow.
