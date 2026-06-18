@@ -1,12 +1,12 @@
 # DC01 — Active Directory Hardening
 
-DC01 is the defensive showcase of the lab. It's a Windows Server 2022 domain controller (`corp.soclab.local`) that I hardened to a CIS-style baseline. The point of this box is to show what a *defended* AD looks like. The offensive work happens against a separate, deliberately-broken AD (GOAD) and the comparison between the two is the whole story: here's what's broken in the wild, here's what I build to fix it.
+DC01 is the defensive showcase of the lab. It's a Windows Server 2022 domain controller (`corp.soclab.local`) that I hardened to a CIS baseline. The point of this box is to show what a *defended* AD looks like. The offensive DC work happens against a separate, deliberately-broken AD (GOAD) and the comparison between the two is the whole story: here's what's broken in the wild, here's what I build to fix it.
 
 Everything below was applied by hand so I have a general understanding of the controls.
 
 ## What I hardened, and why
 
-**Protected Users group** — Put the privileged accounts in it. Members can't use NTLM, can't use RC4, and their credentials aren't cached, which shuts down a lot of credential-theft and replay.
+**Protected Users group** — Put the privileged accounts in it. Members can't use NTLM, can't use RC4, and their credentials aren't cached, which shuts down a lot of credential-theft and replay attacks.
 
 **AES-only Kerberos (RC4 disabled)** — Set supported encryption types to AES only. This is what makes Kerberoasting impractical: RC4 service tickets crack fast offline, AES ones don't.
 
@@ -18,11 +18,11 @@ Everything below was applied by hand so I have a general understanding of the co
 
 **Full audit policy** — Enabled success/failure auditing across logon, Kerberos, account/group management, directory service access + changes + replication, privilege use, and process creation. This is what actually feeds the SIEM — without it, the detections have nothing to detect.
 
-**Command-line logging in Event 4688** — So process-creation events include the full command line, not just the binary name. Huge for catching what an attacker actually ran.
+**Command-line logging in Event 4688** — Process creation events include the full command line, not just the binary name. Huge for catching what an attacker actually ran.
 
 **PowerShell logging** — Script-block, module, and transcript logging all on. Catches encoded/obfuscated PowerShell, which is most of what gets used post-exploitation.
 
-**Fine-grained password policies** — A 25-character policy for service accounts and a separate tighter one for Tier-0 admins. Long service-account passwords are the other half of making Kerberoasting pointless.
+**Fine-grained password policies** — A 25-character policy for service accounts and a separate tighter one for Tier-0 admins. Long service-account passwords are the other half of making Kerberoasting harder.
 
 **Windows LAPS** — Randomizes and rotates the local administrator password on each machine. This breaks lateral movement — a stolen local-admin hash from one box is useless on the next.
 
