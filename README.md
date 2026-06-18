@@ -1,5 +1,5 @@
 # aws-soc-homelab
-Production-grade SOC home lab on AWS with SIEM, hardened AD, network IDS, hybrid identity. (In progress)
+Production like SOC home lab on AWS with SIEM, hardened AD, network IDS, hybrid identity. (In progress)
 
 ![Status](https://img.shields.io/badge/status-in_progress-yellow?style=flat-square)
 ![AWS](https://img.shields.io/badge/cloud-AWS-orange?style=flat-square&logo=amazonaws)
@@ -10,16 +10,22 @@ Production-grade SOC home lab on AWS with SIEM, hardened AD, network IDS, hybrid
 
 #Summary
 
-A production style Security Operations Center built from scratch on AWS, spanning both defense and offense as follows -> A segmented multi-VPC network, a four tool SIEM/IDS detection stack, a CIS hardened Active Directory domain, a WAF protected application tier, an isolated offensive lab (GOAD), and adversary emulation tooling (Atomic Red Team, Caldera) driving documented purple team attack and detect scenarios mapped to MITRE ATT&CK.
+Production style Security Operations Center built from scratch on AWS, spanning both defense and offense as follows: 
+- Segmented multi-VPC network
+- Four tool SIEM/IDS detection stack
+- A CIS hardened Active Directory domain
+- WAF protected application tier
+- An isolated offensive lab - GOAD for Domain Controller attack scenarios
+- Adversary emulation tooling (Atomic Red Team, Caldera) driving documented purple team attack and detect scenarios mapped to MITRE ATT&CK.
 
 # STATUS: ACTIVELY BUILDING. 
 
-This is a living project -> **I'm documenting it as I build**, including the real problems I hit and how I solved them. The build log in `build-notes/` reflects genuine troubleshooting. Sections marked "planned" are next on the roadmap.
+This is a living project -> **I'm documenting it as I build**, including the real problems I hit and how I solved them. The build log in `build-notes/` reflects genuine troubleshooting. Sections marked "planned" in Build Status (below) are next on the roadmap.
 
 
 # Why I built this
 
-To **learn/practice** core cybersecurity concepts in **offensive/defensive/cloud** security operations end to end: network design, SIEM engineering, detection writing, AD hardening, and the offensive techniques those defenses are meant to stop. I learn fastest by building real systems and debugging real failures, and this repo is the evidence of that process. The same skills can be trasfered to other cloud vendors (Azure/GCP) and tools (Sentinel, Splunk, Defender), which I'm confident I can pick up quickly.
+To **learn/practice** core cybersecurity concepts in **offensive/defensive/cloud** security operations end to end: network design, SIEM engineering, detection writing, AD hardening, and the offensive techniques those defenses are meant to stop. I learn fastest by building real systems and debugging real failures, and this repo is the evidence of that process. The same skills can be trasfered to other cloud vendors (Azure/GCP) and tools (Sentinel, Defender), which I'm confident I can pick up quickly.
 
 
 # Architecture
@@ -194,7 +200,7 @@ See `architecture/` for more info.
 
 - Linux/Windows administration, troubleshooting, and secure by default configuration.
 
-- Offensive & Purple-team: adversary emulation with Atomic Red Team and Caldera, attacks against an isolated GOAD lab (Kerberoasting, AS-REP roasting, DCSync, NTLM relay, Golden Ticket, password spraying, web exploitation), each mapped to MITRE ATT&CK and paired with the detection that catches it and the hardening that stops it.
+- Offensive & Purple-team: adversary emulation with Atomic Red Team and Caldera, attacks against an isolated GOAD lab (Kerberoasting, AS-REP roasting, DCSync, NTLM relay, Golden Ticket, password spraying, web exploitation on DMZ apps), each mapped to MITRE ATT&CK and paired with the detection that catches it and the hardening that stops it.
 
 
 # Tech stack
@@ -235,7 +241,7 @@ Real problems hit during the build (full detail in `build-notes/`):
 
 | Directory | Contents |
 |-----------|----------|
-| `architecture/` | network diagram + design decisions |
+| `architecture/` | design decisions |
 | `build-notes/` | phase-by-phase build log with troubleshooting |
 | `detections/` | `wazuh-rules/`, `suricata/`, `logstash-pipelines/` |
 | `docs/` | deep-dives (AD hardening, etc.) |
