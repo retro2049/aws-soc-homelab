@@ -172,7 +172,7 @@ See `architecture/` for more info.
 | Wazuh SIEM + agents 			            | ✅ Done 		| Custom detection rules           |
 | Elastic Stack + Logstash pipelines 		    | ✅ Done 		| CloudTrail + VPC Flow Logs 	   |
 | Suricata network IDS + VPC traffic mirroring      | ✅ Done 		| Alerts forwarded to Wazuh 	   |
-| Vulnerable web apps (DVWA, Juice Shop) 	    | ✅ Done    | 	       --- 		   |
+| Vulnerable web apps (DVWA, Juice Shop) 	    | ✅ Done    | Juice Shop deployed on Docker 	       |
 | Splunk SIEM (HEC + AWS add-on + SPL detections)   | 🔶 In progress        | Enterprise SIEM + SPL queries    |
 | Finance DB + mail server 			    | ✅ Done 	| 	       ---		   |
 | AWS Client VPN 				    | 📋 Planned 	|              ---	           |
