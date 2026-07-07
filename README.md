@@ -172,13 +172,13 @@ See `architecture/` for more info.
 | Wazuh SIEM + agents 			            | ✅ Done 		| Custom detection rules           |
 | Elastic Stack + Logstash pipelines 		    | ✅ Done 		| CloudTrail + VPC Flow Logs 	   |
 | Suricata network IDS + VPC traffic mirroring      | ✅ Done 		| Alerts forwarded to Wazuh 	   |
-| Vulnerable web apps (DVWA, Juice Shop) 	    | 🔶 In progress    | 	       --- 		   |
-| Splunk SIEM (HEC + AWS add-on + SPL detections)   | 📋 Planned        | Enterprise SIEM + SPL queries    |
-| Finance DB + mail server 			    | 📋 Planned 	| 	       ---		   |
+| Vulnerable web apps (DVWA, Juice Shop) 	    | ✅ Done    | 	       --- 		   |
+| Splunk SIEM (HEC + AWS add-on + SPL detections)   | 🔶 In progress        | Enterprise SIEM + SPL queries    |
+| Finance DB + mail server 			    | ✅ Done 	| 	       ---		   |
 | AWS Client VPN 				    | 📋 Planned 	|              ---	           |
 | Hybrid identity (Entra ID + Okta) 		    | 📋 Planned	|              ---	           |
 | GOAD offensive lab (isolated VPC)		    | 📋 Planned 	|  	       --- 		   |
-| AWS WAF on application load balancer              | 📋 Planned        | Rules + rate limiting + logging  |
+| AWS WAF on application load balancer              | 🔶 In progress       | Rules + rate limiting + logging  |
 | Adversary emulation - Atomic Red Team             | 📋 Planned        | Atomic tests per MITRE technique |
 | Adversary emulation - Caldera                     | 📋 Planned        | Automated attack chains          |
 | Purple team scenarios (MITRE ATT&CK mapped)       | 📋 Planned        | Attack -> detect -> harden       |
