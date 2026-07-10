@@ -176,9 +176,9 @@ See `architecture/` for more info.
 | Splunk SIEM (HEC + AWS add-on + SPL detections)   | 🔶 In progress        | Enterprise SIEM + SPL queries    |
 | Finance DB + mail server 			    | ✅ Done 	| 	       ---		   |
 | AWS Client VPN 				    | 📋 Planned 	|              ---	           |
-| Hybrid identity (Entra ID + Okta) 		    | 📋 Planned	|              ---	           |
+| Hybrid identity (Entra ID + Okta) 		    | 🔶 In progress	|              ---	           |
 | GOAD offensive lab (isolated VPC)		    | 📋 Planned 	|  	       --- 		   |
-| AWS WAF on application load balancer              | 🔶 In progress       | Rules + rate limiting + logging  |
+| AWS WAF on application load balancer              | ✅ Done       | Rules + rate limiting + logging  |
 | Adversary emulation - Atomic Red Team             | 📋 Planned        | Atomic tests per MITRE technique |
 | Adversary emulation - Caldera                     | 📋 Planned        | Automated attack chains          |
 | Purple team scenarios (MITRE ATT&CK mapped)       | 📋 Planned        | Attack -> detect -> harden       |
